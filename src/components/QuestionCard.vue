@@ -5,9 +5,9 @@
       <button
         v-for="(answer, index) in question.answers"
         :key="index"
-        :disabled="answered"
-        :class="answerClass(index)"
-        @click="handleAnswer(index)"
+        :class="buttonClass(index)"
+        :disabled="selectedAnswer !== null"
+        @click="selectAnswer(index)"
       >
         {{ answer }}
       </button>
@@ -22,39 +22,45 @@ export default {
   props: {
     question: {
       type: Object,
-      required: true,
+      required: true
+      // { question: String, answers: Array, correct: Number }
     },
+    selectedAnswer: {
+      type: Number,
+      default: null
+      // null = no answer chosen yet
+      // 0/1/2/3 = the index of the button the player clicked
+    }
   },
 
   emits: ['answer'],
 
   data() {
     return {
-      answered: false,
-      selectedIndex: null,
+      // nothing needed here — state comes from props
     }
   },
 
+
   methods: {
-    handleAnswer(index) {
-      this.answered = true
-      this.selectedIndex = index
-
-      const isCorrect = index === this.question.correct
-
-      setTimeout(() => {
-        this.$emit('answer', isCorrect)
-        this.answered = false
-        this.selectedIndex = null
-      }, 1000)
+    selectAnswer(index) {
+      if (this.selectedAnswer !== null) return  // already answered, ignore
+      this.$emit('answer', index)
     },
 
-    answerClass(index) {
-      if (!this.answered || this.selectedIndex === null) return ''
+    buttonClass(index) {
+      if (this.selectedAnswer === null) return ''
       if (index === this.question.correct) return 'correct'
-      if (index === this.selectedIndex) return 'wrong'
+      if (index === this.selectedAnswer) return 'wrong'
       return ''
     },
+
+    // answerClass(index) {
+    //   if (!this.answered || this.selectedIndex === null) return ''
+    //   if (index === this.question.correct) return 'correct'
+    //   if (index === this.selectedIndex) return 'wrong'
+    //   return ''
+    // },
   },
 }
 </script>
