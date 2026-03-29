@@ -31,18 +31,16 @@
         @restart="handleRestart"
       />
 
-      <div v-if="store.gameState === 'end'">
-        <h2>Game Over</h2>
-        <p>You scored {{ store.score }} of {{ store.questions.length }}</p>
-        <div v-if="!store.scoreSubmitted">
+      <div v-if="store.gameState === 'end'" class="score-submit">
+        <div v-if="!store.scoreSubmitted" class="submit-form">
           <input
             v-model="store.playerName"
+            class="name-input"
             placeholder="Enter your name"
           />
-          <button @click="store.submitScore()">Submit Score</button>
+          <button class="submit-btn" @click="store.submitScore()">Submit Score</button>
         </div>
-        <p v-else>Score submitted! ✓</p>
-        <button @click="handleRestart">Play Again</button>
+        <p v-else class="submitted-msg">Score submitted!</p>
       </div>
 
     </div>
@@ -124,5 +122,65 @@ export default {
   text-align: center;
   color: #aaa;
   margin: 0;
+}
+
+.score-submit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.submit-form {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.name-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: var(--sans);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-h);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.name-input:focus {
+  border-color: var(--accent-border);
+}
+
+.name-input::placeholder {
+  color: var(--text);
+  opacity: 0.6;
+}
+
+.submit-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-family: var(--sans);
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.submit-btn:hover {
+  opacity: 0.85;
+}
+
+.submitted-msg {
+  color: #22c55e;
+  font-size: 1.1rem;
 }
 </style>
